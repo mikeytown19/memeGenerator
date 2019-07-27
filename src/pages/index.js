@@ -4,44 +4,39 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Image from "../components/image"
 import SEO from "../components/seo"
+import { async } from "q";
 
 
-function GetImages() {
-  const [hasError, setErrors] = useState(false);
-  const [data, setData] = useState({images: []});
 
-  async function fetchData() {
-    const res = await fetch("https://api.imgflip.com/get_memes");
-    res
-    .json()
-    .then(res => setData(res))
-    .catch(err => setErrors(err));
-    }
-
+const useFetch = (url, options) => {
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-
-
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const res = await fetch(url, options);
+        const json = await res.json();
+        setResponse(json);
+        setIsLoading(false);
+      } catch(error) {
+        setError(error);
+      }
+    }
     fetchData()
-
-  })
-
-  return (
-    <div>
-
-
-      {JSON.stringify(data)}
-
-
-
-    </div>
-  )
+  }, [])
+  return {response, error, isLoading};
 }
+
+// https://api.imgflip.com/get_memes
+
 
 const IndexPage = () => (
   <Layout>
     <SEO title="Home" />
     <h1>Meme Generator</h1>
-    {GetImages()}
+
 
   </Layout>
 )
