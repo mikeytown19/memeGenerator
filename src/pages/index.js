@@ -14,8 +14,7 @@ const IndexPage = () => {
   const [memes, setMemes] = useState([]);
   let [displayImage, updateDisplayImage] = useState('');
   const [count, setCount] = useState(0);
-
-  const [inputValues, updateInputValues] = useState(['first', 'test2','test3']);
+  const [inputComponents, UpdateInputComponents] = useState([<Input/>])
 
   useEffect(() => {
 
@@ -33,51 +32,26 @@ const IndexPage = () => {
     return <div>Loading...</div>
   }
 
-  let MemesShown = memes.map((item, index, arr) => {
+  let MemesShown = memes.map((item, index ) => {
     if(index <= count && index > count - 10 ) {
       return <img onClick={() => updateDisplayImage(item.url) } src={item.url} key={index} alt={item.name}/>
     }
  })
 
- const updateValuesWhatever = (newValue, count) => {
-  updateInputValues(prevState => {
-    prevState[count] = newValue
-    return prevState
-  })
- }
 
 return (
   <Layout>
     <SEO title="Home" />
     <h1>Meme Generator</h1>
-    {/* <button onClick={() => updateInputs(prevState => prevState.push('shit'))}>Add input</button> */}
-    {inputValues.map((value, i) => <Input key={i} values={value} updateInputValues={updateValuesWhatever} count={i}/>)}
-    {/* <Input inputs={inputs} updateInputs={updateInputs}/> */}
+
+    <button onClick={() => UpdateInputComponents(prevState => prevState.push(<Input />))}>Add input</button>
 
     <ShowcaseContainer>
-      <DraggableInputContainer>
-          {inputValues.map((value, i) => {
+        {inputComponents.map((item, index) => {
+          console.log(item)
+          return item
+        })}
 
-            return  <Draggable
-                      key={i}
-                      bounds={{top: -150, left: -150, right: 150, bottom: 150}}
-                      handle=".handle"
-                      defaultPosition={{x: 0, y: 0}}
-                      position={null}
-                      grid={[10, 10]}
-                      scale={1}
-                      >
-                          <div className="container">
-                            <div className="handle">
-                              {value}
-                            </div>
-
-                          </div>
-                    </Draggable>
-          })}
-
-
-          </DraggableInputContainer>
 
       </ShowcaseContainer>
 
@@ -121,26 +95,6 @@ const DisplayImage = styled.img`
   display: flex;
 `
 
-
-const DraggableInputContainer = styled.div`
-
-  height: 100%;
-  position: absolute;
-  min-height: 400px;
-  text-align: center;
-
-
-  .container {
-    max-width: 300px;
-    border: blue solid 2px;
-    margin: auto;
-  }
-
-  .react-draggable {
-    cursor: pointer;
-  }
-
-`
 
 const ShowcaseContainer = styled.div`
   position: relative;
