@@ -14,7 +14,12 @@ const IndexPage = () => {
   const [memes, setMemes] = useState([]);
   let [displayImage, updateDisplayImage] = useState('');
   const [count, setCount] = useState(0);
-  const [inputComponents, UpdateInputComponents] = useState([<Input/>])
+  const [inputComponents, UpdateInputComponents] = useState([<Input key={count}/>])
+
+  console.log(inputComponents);
+
+
+
 
   useEffect(() => {
 
@@ -47,11 +52,7 @@ return (
     <button onClick={() => UpdateInputComponents(prevState => prevState.push(<Input />))}>Add input</button>
 
     <ShowcaseContainer>
-        {inputComponents.map((item, index) => {
-          console.log(item)
-          return item
-        })}
-
+    {inputComponents[0]}
 
       </ShowcaseContainer>
 
