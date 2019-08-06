@@ -5,8 +5,8 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import {useFetch} from '../hooks/useFetch'
-import Draggable, {DraggableCore} from 'react-draggable'; // Both at the same time
-import Input from '../components/input'
+// import Draggable, {DraggableCore} from 'react-draggable'; // Both at the same time
+// import Input from '../components/input'
 
 
 const IndexPage = () => {
@@ -14,15 +14,11 @@ const IndexPage = () => {
   const [memes, setMemes] = useState([]);
   let [displayImage, updateDisplayImage] = useState('');
   const [count, setCount] = useState(0);
-  const [inputComponents, UpdateInputComponents] = useState([<Input key={count}/>])
-
-  console.log(inputComponents);
-
+  const [inputComponents, UpdateInputComponents] = useState([])
 
 
 
   useEffect(() => {
-
     setIsLoading(true);
     useFetch('https://api.imgflip.com/get_memes', {}).then(value => {
       setIsLoading(false);
@@ -30,8 +26,17 @@ const IndexPage = () => {
       setMemes([...value.data.memes])
       updateDisplayImage([...value.data.memes][0].url)
 
-     })
+    })
   }, [])
+
+
+  useEffect(() => {
+    console.log('updated / rendered')
+    UpdateInputComponents(prevState => {
+      prevState.push(0)
+      return prevState
+    })
+  })
 
  if (isLoading) {
     return <div>Loading...</div>
@@ -43,27 +48,34 @@ const IndexPage = () => {
     }
  })
 
+ let inputsVisable = inputComponents.map((item, index) => {
+  return <div key={index}>poop</div>
+ })
+
+
 
 return (
   <Layout>
     <SEO title="Home" />
     <h1>Meme Generator</h1>
-
-    <button onClick={() => UpdateInputComponents(prevState => prevState.push(<Input />))}>Add input</button>
+    <button onClick={() => UpdateInputComponents(prevState => {
+       console.log(prevState)
+       prevState.push(0)
+         return prevState
+      })}>
+        Add input
+    </button>
 
     <ShowcaseContainer>
-    {inputComponents[0]}
+      {inputsVisable}
+    </ShowcaseContainer>
 
-      </ShowcaseContainer>
-
-
-
-    <DisplayImage src={displayImage} alt=''/>
-      {
+    {/* <DisplayImage src={displayImage} alt=''/> */}
+      {/* {
         count > 10 &&
          <button onClick={() => setCount(prevCount => prevCount - 10)}>Back</button>
       }
-      <button onClick={() => setCount(prevCount => prevCount + 10)}>Next</button>
+      <button onClick={() => setCount(prevCount => prevCount + 10)}>Next</button> */}
       <ImageContainer>
         {MemesShown}
       </ImageContainer>
