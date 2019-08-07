@@ -5,19 +5,19 @@ import styled from '@emotion/styled'
 
 function useInput({ type, key }) {
   const [value, setValue] = useState("");
-  const input = <textarea className="not-draggable" key={key} value={value} onChange={e => setValue(e.target.value)} type={type} />;
+  const input = <textarea className="not-draggable" key={key} value={value} placeholder="Type here" onChange={e => setValue(e.target.value)} type={type} />;
   return [value, input];
 }
 
-const Input = (props) => {
-
+const Input = (props, key) => {
+console.log(props)
   const [username, userInput] = useInput({ type: "text", key: 0 });
 
 
 return (
-  <DraggableInputContainer>
+  <DraggableInputContainer key={props.keys}>
       <Draggable
-        bounds={{top: -150, left: -150, right: 150, bottom: 150}}
+        bounds={{top: -400, left: -400, right: 400, bottom: 400}}
         handle=".handle"
         cancel="string"
         defaultPosition={{x: 0, y: 0}}
@@ -25,6 +25,7 @@ return (
         cancel=".not-draggable"
         grid={[10, 10]}
         scale={1}
+        key={props.keys}
         >
           <div className="container">
             <div className="handle">

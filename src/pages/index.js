@@ -6,7 +6,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import {useFetch} from '../hooks/useFetch'
 // import Draggable, {DraggableCore} from 'react-draggable'; // Both at the same time
-// import Input from '../components/input'
+import Input from '../components/input'
 
 
 const IndexPage = () => {
@@ -14,9 +14,12 @@ const IndexPage = () => {
   const [memes, setMemes] = useState([]);
   let [displayImage, updateDisplayImage] = useState('');
   const [count, setCount] = useState(0);
-  const [inputComponents, UpdateInputComponents] = useState([])
+  let [components, updateComponents] = useState([]);
 
-
+  function AddNewComponent() {
+    const newComponents = [...components, Input];
+    updateComponents(newComponents)
+  }
 
   useEffect(() => {
     setIsLoading(true);
@@ -25,18 +28,10 @@ const IndexPage = () => {
       setCount(prevCount => prevCount += 10)
       setMemes([...value.data.memes])
       updateDisplayImage([...value.data.memes][0].url)
-
     })
   }, [])
 
 
-  useEffect(() => {
-    console.log('updated / rendered')
-    UpdateInputComponents(prevState => {
-      prevState.push(0)
-      return prevState
-    })
-  })
 
  if (isLoading) {
     return <div>Loading...</div>
@@ -48,29 +43,22 @@ const IndexPage = () => {
     }
  })
 
- let inputsVisable = inputComponents.map((item, index) => {
-  return <div key={index}>poop</div>
- })
-
 
 
 return (
   <Layout>
     <SEO title="Home" />
     <h1>Meme Generator</h1>
-    <button onClick={() => UpdateInputComponents(prevState => {
-       console.log(prevState)
-       prevState.push(0)
-         return prevState
-      })}>
+    <button onClick={AddNewComponent}>
         Add input
     </button>
 
     <ShowcaseContainer>
-      {inputsVisable}
+    {components.length !== 0 &&
+              components.map((Input, i) => <Input key={i} keys={i} text='poop' />)}
     </ShowcaseContainer>
 
-    {/* <DisplayImage src={displayImage} alt=''/> */}
+    <DisplayImage src={displayImage} alt=''/>
       {/* {
         count > 10 &&
          <button onClick={() => setCount(prevCount => prevCount - 10)}>Back</button>
