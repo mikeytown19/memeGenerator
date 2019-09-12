@@ -7,7 +7,7 @@ import { theme, media } from '.'
 export const GlobalStyles = () => (
   <Global
   styles={css`
-    @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&display=swap');
+   @import url('https://fonts.googleapis.com/css?family=Luckiest+Guy&display=swap');
     h1,
     h2,
     h3,
@@ -16,7 +16,7 @@ export const GlobalStyles = () => (
     h6,
     p {
       margin: 0;
-      font-family: 'Open Sans', sans-serif;
+      font-family: 'Luckiest Guy', cursive;
     }
     h1 {
       font-size: 60px;

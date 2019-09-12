@@ -10,6 +10,8 @@ import Input from '../components/input'
 
 
 const IndexPage = () => {
+
+
   const [isLoading, setIsLoading] = useState(false);
   const [memes, setMemes] = useState([]);
   let [displayImage, updateDisplayImage] = useState('');
@@ -19,6 +21,12 @@ const IndexPage = () => {
   function AddNewComponent() {
     const newComponents = [...components, Input];
     updateComponents(newComponents)
+
+  }
+
+  function ClearComponents() {
+    const clearComponents = [];
+    updateComponents(clearComponents)
   }
 
   useEffect(() => {
@@ -39,45 +47,67 @@ const IndexPage = () => {
 
   let MemesShown = memes.map((item, index ) => {
     if(index <= count && index > count - 10 ) {
-      return <img onClick={() => updateDisplayImage(item.url) } src={item.url} key={index} alt={item.name}/>
+      return <img onClick={() => {
+        updateDisplayImage(item.url)
+        ClearComponents()
+      }} src={item.url} key={index} alt={item.name}/>
     }
  })
-
-
 
 return (
   <Layout>
     <SEO title="Home" />
-    <h1>Meme Generator</h1>
-    <button onClick={AddNewComponent}>
-        Add input
-    </button>
+
+    <StyledH1>Meme Generator</StyledH1>
+    <ShowcaseContainer>
+      <ButtonStyles color="#717EC3" onClick={AddNewComponent}>Add input</ButtonStyles>
+      {components.length !== 0 &&
+             <ButtonStyles color="#D05353" onClick={ClearComponents}>Clear all Inputs</ButtonStyles>}
+
+    </ShowcaseContainer>
 
     <ShowcaseContainer>
     {components.length !== 0 &&
-              components.map((Input, i) => <Input key={i} keys={i} text='poop' />)}
+              components.map((Input, i) => <Input key={i} keys={i} text='Test' />)}
     </ShowcaseContainer>
 
     <DisplayImage src={displayImage} alt=''/>
-      {/* {
+    <ShowcaseContainer>
+
+      {
         count > 10 &&
-         <button onClick={() => setCount(prevCount => prevCount - 10)}>Back</button>
+        <ButtonStyles  color="#329998" onClick={() => setCount(prevCount => prevCount - 10)}>Back</ButtonStyles>
       }
-      <button onClick={() => setCount(prevCount => prevCount + 10)}>Next</button> */}
-      <ImageContainer>
-        {MemesShown}
-      </ImageContainer>
+       {
+        count < 100 &&
+        <ButtonStyles color="#329998" onClick={() => setCount(prevCount => prevCount + 10)}>Next</ButtonStyles>
+
+      }
+
+      </ShowcaseContainer>
+      <MemeImagesContainer>
+        <ImageContainer>
+          {MemesShown}
+        </ImageContainer>
+      </MemeImagesContainer>
+
+
    </Layout>
   )
 }
 
+const MemeImagesContainer = styled.div`
+  max-width: 1200px;
+  margin: auto;
+`
 
 const ImageContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  background-color: #f4f4f4;
-  max-width: 1000px;
-  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  grid-auto-rows: 230px;
+  width: 100%;
+  justify-items: center;
+
 
   img {
     max-width: 200px;
@@ -85,6 +115,7 @@ const ImageContainer = styled.div`
     max-height:200px;
     margin: 10px;
     cursor: pointer;
+    border: solid #2D2D2D 1px;
   }
 `
 
@@ -94,6 +125,8 @@ const DisplayImage = styled.img`
   margin: auto;
   text-align: center;
   display: flex;
+  border: solid #2D2D2D 1px;
+
 `
 
 
@@ -102,6 +135,26 @@ const ShowcaseContainer = styled.div`
   text-align: center;
   display: flex;
   justify-content: center;
+  margin: 10px 0;
+`
+
+const ButtonStyles = styled.button`
+  background-color: ${props => props.color ? props.color : 'teal'};
+  appearance: none;
+  border: 0;
+  color: white;
+  padding: 5px 15px;
+  margin: 0 5px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 2px;
+`
+
+const StyledH1 = styled.h1`
+  background: -webkit-linear-gradient(45deg, #D05353, #717EC3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-top: 30px;
 `
 
 export default IndexPage

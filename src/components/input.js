@@ -10,12 +10,11 @@ function useInput({ type, key }) {
 }
 
 const Input = (props, key) => {
-console.log(props)
   const [username, userInput] = useInput({ type: "text", key: 0 });
 
 
 return (
-  <DraggableInputContainer key={props.keys}>
+  <DraggableInputContainer key={key}>
       <Draggable
         bounds={{top: -400, left: -400, right: 400, bottom: 400}}
         handle=".handle"
@@ -29,14 +28,10 @@ return (
         >
           <div className="container">
             <div className="handle">
-            <div>
-
-              {userInput}
-
+              <div>
+                {userInput}
+              </div>
             </div>
-            </div>
-
-
           </div>
     </Draggable>
   </DraggableInputContainer>
@@ -44,11 +39,7 @@ return (
 
 }
 
-
-
 export default Input
-
-
 
 const DraggableInputContainer = styled.div`
 
@@ -69,10 +60,9 @@ const DraggableInputContainer = styled.div`
       height: 100%;
       width: auto;
       color: white;
-      text-shadow: 2px 2px #000;
+      text-shadow: 2px 2px 5px #2D2D2D;
     }
   }
-
 
   .container {
     margin: auto;
