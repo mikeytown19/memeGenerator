@@ -1,0 +1,31 @@
+{
+  "env": {
+    "jest": true,
+    "browser": true
+  },
+  "extends": ["airbnb", "plugin:prettier/recommended"],
+  "plugins": ["emotion"],
+  "rules": {
+    "import/no-extraneous-dependencies": 0,
+    "react/jsx-one-expression-per-line": 0,
+    "react/jsx-wrap-multilines": [
+      "warn",
+      {
+        "declaration": false,
+        "assignment": false
+      }
+    ],
+    "prettier/prettier": [
+      "warn",
+      {
+        "trailingComma": "es5",
+        "singleQuote": true,
+        "semi": false
+      }
+    ],
+    "emotion/jsx-import": "error",
+    "emotion/no-vanilla": "error",
+    "emotion/import-from-emotion": "error",
+    "emotion/styled-import": "error"
+  }
+}

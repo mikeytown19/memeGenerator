@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react"
+import React, {useState, useEffect, useRef} from "react"
 import emotion from '@emotion/core'
 import styled from '@emotion/styled'
 import { Link } from "gatsby"
@@ -7,14 +7,18 @@ import SEO from "../components/seo"
 import {useFetch} from '../hooks/useFetch'
 // import Draggable, {DraggableCore} from 'react-draggable'; // Both at the same time
 import Input from '../components/input'
+import * as htmlToImage from 'html-to-image';
+import { saveAs } from 'file-saver';
+
 
 
 const IndexPage = () => {
-
-
+ const imgEl = useRef(null);
+ const imgWidth = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [memes, setMemes] = useState([]);
   let [displayImage, updateDisplayImage] = useState('');
+  let [refImg, updateRefImage] = useState('');
   const [count, setCount] = useState(0);
   let [components, updateComponents] = useState([]);
 
@@ -54,6 +58,28 @@ const IndexPage = () => {
     }
  })
 
+
+ function TakeImage({current}) {
+  htmlToImage.toJpeg(current ,{
+    width: imgWidth.current.width,
+    height: imgWidth.current.height,
+    backgroundColor: 'initial'
+  })
+  .then(function (dataUrl) {
+    updateRefImage(dataUrl)
+    const imageName = dataUrl.toString().substr(-10)
+
+    window.saveAs(dataUrl, `MemeImage${imageName}.png`);
+
+
+
+  })
+  .catch(function (error) {
+    console.error('oops, something went wrong!', error);
+  });
+ }
+
+
 return (
   <Layout>
     <SEO title="Home" />
@@ -61,18 +87,26 @@ return (
     <StyledH1>Meme Generator</StyledH1>
     <ShowcaseContainer>
       <ButtonStyles color="#717EC3" onClick={AddNewComponent}>Add input</ButtonStyles>
-      {components.length !== 0 &&
-             <ButtonStyles color="#D05353" onClick={ClearComponents}>Clear all Inputs</ButtonStyles>}
-
+      {components.length !== 0 && <ButtonStyles color="#D05353" onClick={ClearComponents}>Clear all Inputs</ButtonStyles>}
     </ShowcaseContainer>
 
-    <ShowcaseContainer>
-    {components.length !== 0 &&
-              components.map((Input, i) => <Input key={i} keys={i} text='Test' />)}
-    </ShowcaseContainer>
+    <ImageCaptureContainer ref={imgEl}>
+      <div className="ass">
+        <InputContainer>
+        {components.length !== 0 &&
+                  components.map((Input, i) => <Input key={i} keys={i} text='Test' />)}
+        </InputContainer>
 
-    <DisplayImage src={displayImage} alt=''/>
+        <DisplayImage ref={imgWidth} src={displayImage} alt='' />
+      </div>
+
+    </ImageCaptureContainer>
+
+
+
+      {/* {refImg && <img src={refImg} />} */}
     <ShowcaseContainer>
+      <ButtonStyles  color="#D05353"  onClick={()=> TakeImage(imgEl)}>Download</ButtonStyles>
 
       {
         count > 10 &&
@@ -99,6 +133,11 @@ return (
 const MemeImagesContainer = styled.div`
   max-width: 1200px;
   margin: auto;
+`
+const ImageCaptureContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  position: relative;
 `
 
 const ImageContainer = styled.div`
@@ -136,6 +175,14 @@ const ShowcaseContainer = styled.div`
   display: flex;
   justify-content: center;
   margin: 10px 0;
+`
+
+const InputContainer = styled.div`
+  position: relative;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+
 `
 
 const ButtonStyles = styled.button`

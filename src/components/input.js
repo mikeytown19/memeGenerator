@@ -45,8 +45,16 @@ const DraggableInputContainer = styled.div`
 
   height: 100%;
   position: absolute;
-  min-height: 400px;
+  /* min-height: 400px; */
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+
+
+
+
 
   .handle {
     padding: 17px;
@@ -61,6 +69,7 @@ const DraggableInputContainer = styled.div`
       width: auto;
       color: white;
       text-shadow: 2px 2px 5px #2D2D2D;
+      resize: none;
     }
   }
 
