@@ -9,6 +9,7 @@ import {useFetch} from '../hooks/useFetch'
 import Input from '../components/input'
 import * as htmlToImage from 'html-to-image';
 import { saveAs } from 'file-saver';
+import ImageUploader from 'react-images-upload';
 
 
 
@@ -21,6 +22,14 @@ const IndexPage = () => {
   let [refImg, updateRefImage] = useState('');
   const [count, setCount] = useState(0);
   let [components, updateComponents] = useState([]);
+  let [images, updateImages] = useState([]);
+
+  function OnDrop(pictureFiles, pictureDataURLs) {
+    images = pictureFiles
+    updateImages(images)
+    console.log(images)
+  }
+
 
   function AddNewComponent() {
     const newComponents = [...components, Input];
@@ -89,6 +98,14 @@ return (
       <ButtonStyles color="#717EC3" onClick={AddNewComponent}>Add input</ButtonStyles>
       {components.length !== 0 && <ButtonStyles color="#D05353" onClick={ClearComponents}>Clear all Inputs</ButtonStyles>}
     </ShowcaseContainer>
+    <ImageUploader
+                withIcon={true}
+                buttonText='Choose images'
+                onChange={OnDrop}
+                imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                maxFileSize={5242880}
+                withPreview={true}
+            />
 
     <ImageCaptureContainer ref={imgEl}>
       <div className="ass">
